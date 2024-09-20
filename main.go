@@ -97,6 +97,14 @@ func main() {
 	books = append(books, Book{ID: "2", Isbn: "454555", Title: "Book Two", Author: &Author{Firstname: "Steve", Lastname: "Smith"}})
 
 	// Route handles & endpoints
+	r.HandleFunc("/",
+		func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"message": "Welcome to the Go REST API",
+			})
+		},
+	).Methods("GET")
 	r.HandleFunc("/books", getBooks).Methods("GET")
 	r.HandleFunc("/books/{id}", getBook).Methods("GET")
 	r.HandleFunc("/books", createBook).Methods("POST")
@@ -105,6 +113,7 @@ func main() {
 
 	// Start server
 	log.Fatal(http.ListenAndServe(":8000", r))
+	print("Server started on port 8000")
 }
 
 // Request sample
